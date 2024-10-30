@@ -42,7 +42,6 @@ const controlAddPattern = async function () {
     state.pattern.push(chooseRandomColour());
     ++state.level;
     view.rendderTitle(`Level ${state.level}`);
-    console.log(state.pattern);
     view.controlButtons();
     for (let i = 0; i < state.pattern.length; ++i) {
       await press();

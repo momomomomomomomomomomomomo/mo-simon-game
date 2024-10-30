@@ -20,6 +20,5 @@ export const addHeighstScore = function (score) {
 const initScore = function () {
   const storage = localStorage.getItem('heighstScore');
   if (storage) state.heighstScore = JSON.parse(storage);
-  console.log(state.heighstScore);
 };
 initScore();
