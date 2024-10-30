@@ -1,5 +1,5 @@
 import { INIT_PATTERN, PRESS_SEC } from './config.js';
-import { state } from './model.js';
+import { addHeighstScore, state } from './model.js';
 import view from './view.js';
 
 const chooseRandomColour = () => state.colours[Math.floor(Math.random() * 4)];
@@ -9,10 +9,12 @@ const gameOver = function () {
   audio.play();
   view.renderGameOver();
   state.currentIndex = 0;
-  state.level = 0;
-  if (state.heigstScore < state.level) {
-    state.heigstScore = state.level;
+  if (state.heighstScore < state.level) {
+    state.heighstScore = state.level;
+    addHeighstScore(state.level);
+    view.renderScore(state.level);
   }
+  state.level = 0;
   state.pattern = [chooseRandomColour()];
   view.rendderTitle('Game Over, Press Any Key to Restart');
 };
@@ -71,6 +73,7 @@ const init = function () {
   state.pattern = [chooseRandomColour()];
   view.addHandlerClick(controlPress, controlAddPattern);
   view.addHandlerStartBtn(controlStart);
+  view.renderScore(state.heighstScore);
 };
 
 init();

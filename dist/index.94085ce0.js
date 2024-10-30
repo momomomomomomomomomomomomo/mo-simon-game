@@ -595,8 +595,12 @@ const gameOver = function() {
     audio.play();
     (0, _viewJsDefault.default).renderGameOver();
     (0, _modelJs.state).currentIndex = 0;
+    if ((0, _modelJs.state).heighstScore < (0, _modelJs.state).level) {
+        (0, _modelJs.state).heighstScore = (0, _modelJs.state).level;
+        (0, _modelJs.addHeighstScore)((0, _modelJs.state).level);
+        (0, _viewJsDefault.default).renderScore((0, _modelJs.state).level);
+    }
     (0, _modelJs.state).level = 0;
-    if ((0, _modelJs.state).heigstScore < (0, _modelJs.state).level) (0, _modelJs.state).heigstScore = (0, _modelJs.state).level;
     (0, _modelJs.state).pattern = [
         chooseRandomColour()
     ];
@@ -654,6 +658,7 @@ const init = function() {
     ];
     (0, _viewJsDefault.default).addHandlerClick(controlPress, controlAddPattern);
     (0, _viewJsDefault.default).addHandlerStartBtn(controlStart);
+    (0, _viewJsDefault.default).renderScore((0, _modelJs.state).heighstScore);
 };
 init();
 
@@ -701,6 +706,7 @@ exports.export = function(dest, destName, get) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "state", ()=>state);
+parcelHelpers.export(exports, "addHeighstScore", ()=>addHeighstScore);
 var _sounds = require("../sounds/sounds");
 const state = {
     colours: [
@@ -712,7 +718,7 @@ const state = {
     //the right pattern to follow
     pattern: [],
     currentIndex: 0,
-    heigstScore: 0,
+    heighstScore: 0,
     level: 0,
     coloursSound: {
         blue: (0, _sounds.blue),
@@ -722,6 +728,15 @@ const state = {
         wrong: (0, _sounds.wrong)
     }
 };
+const addHeighstScore = function(score) {
+    localStorage.setItem("heighstScore", JSON.stringify(state.heighstScore));
+};
+const initScore = function() {
+    const storage = localStorage.getItem("heighstScore");
+    if (storage) state.heighstScore = JSON.parse(storage);
+    console.log(state.heighstScore);
+};
+initScore();
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../sounds/sounds":"EZ32K"}],"EZ32K":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
@@ -801,6 +816,7 @@ class View {
     _coloursContainer = document.querySelector(".container");
     _title = document.getElementById("level-title");
     _body = document.querySelector("body");
+    _score = document.getElementById("score");
     _colourClick(pressHandler, addPatternHandler, e) {
         const btn = e.target.closest(".btn");
         if (!btn) return;
@@ -821,27 +837,36 @@ class View {
         }, 1000 * (0, _configJs.GAME_OVER_SEC));
         this._startButton.classList.remove("hide");
         this._startButton.textContent = "Play Again";
+        this._coloursContainer.classList.add("inactive");
     }
     addHandlerClick(pressHandler, addPatternHandler) {
         this._coloursContainer.addEventListener("click", this._colourClick.bind(this, pressHandler, addPatternHandler));
     }
-    startingGameButton(handler, e) {
-        const btn = e.target;
-        btn.classList.add("hide");
+    startingGameButton(handler) {
+        this._startButton.classList.add("hide");
         this._coloursContainer.scrollIntoView({
             behavior: "smooth"
         });
+        this._coloursContainer.classList.remove("inactive");
         handler();
+    }
+    startingGameKeyboard(handler) {
+        handler();
+        this._startButton.classList.add("hide");
+        this._coloursContainer.classList.remove("inactive");
     }
     addHandlerStartBtn(handler) {
         this._startButton.addEventListener("click", this.startingGameButton.bind(this, handler));
-        window.addEventListener("keydown", handler);
+        window.addEventListener("keydown", this.startingGameKeyboard.bind(this, handler));
     }
     rendderTitle(title) {
         this._title.textContent = title;
     }
     controlButtons() {
         this._coloursContainer.classList.toggle("inactive");
+    }
+    renderScore(score) {
+        this._score.textContent = `Heighst Score: ${score}`;
     }
 }
 exports.default = new View();

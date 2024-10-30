@@ -4,7 +4,7 @@ export const state = {
   //the right pattern to follow
   pattern: [],
   currentIndex: 0,
-  heigstScore: 0,
+  heighstScore: 0,
   level: 0,
   coloursSound: {
     blue,
@@ -14,3 +14,12 @@ export const state = {
     wrong,
   },
 };
+export const addHeighstScore = function (score) {
+  localStorage.setItem('heighstScore', JSON.stringify(state.heighstScore));
+};
+const initScore = function () {
+  const storage = localStorage.getItem('heighstScore');
+  if (storage) state.heighstScore = JSON.parse(storage);
+  console.log(state.heighstScore);
+};
+initScore();

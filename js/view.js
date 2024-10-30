@@ -5,6 +5,7 @@ class View {
   _coloursContainer = document.querySelector('.container');
   _title = document.getElementById('level-title');
   _body = document.querySelector('body');
+  _score = document.getElementById('score');
   _colourClick(pressHandler, addPatternHandler, e) {
     const btn = e.target.closest('.btn');
     if (!btn) return;
@@ -25,6 +26,7 @@ class View {
     }, 1000 * GAME_OVER_SEC);
     this._startButton.classList.remove('hide');
     this._startButton.textContent = 'Play Again';
+    this._coloursContainer.classList.add('inactive');
   }
   addHandlerClick(pressHandler, addPatternHandler) {
     this._coloursContainer.addEventListener(
@@ -32,26 +34,37 @@ class View {
       this._colourClick.bind(this, pressHandler, addPatternHandler)
     );
   }
-  startingGameButton(handler, e) {
-    const btn = e.target;
-    btn.classList.add('hide');
+  startingGameButton(handler) {
+    this._startButton.classList.add('hide');
     this._coloursContainer.scrollIntoView({
       behavior: 'smooth',
     });
+    this._coloursContainer.classList.remove('inactive');
     handler();
+  }
+  startingGameKeyboard(handler) {
+    handler();
+    this._startButton.classList.add('hide');
+    this._coloursContainer.classList.remove('inactive');
   }
   addHandlerStartBtn(handler) {
     this._startButton.addEventListener(
       'click',
       this.startingGameButton.bind(this, handler)
     );
-    window.addEventListener('keydown', handler);
+    window.addEventListener(
+      'keydown',
+      this.startingGameKeyboard.bind(this, handler)
+    );
   }
   rendderTitle(title) {
     this._title.textContent = title;
   }
   controlButtons() {
     this._coloursContainer.classList.toggle('inactive');
+  }
+  renderScore(score) {
+    this._score.textContent = `Heighst Score: ${score}`;
   }
 }
 export default new View();

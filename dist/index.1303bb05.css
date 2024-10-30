@@ -74,4 +74,11 @@ body {
 .hide {
   display: none;
 }
+
+#score {
+  color: #fef2bf;
+  margin: 5%;
+  font-family: "Press Start 2P", cursive;
+  font-size: 1rem;
+}
 /*# sourceMappingURL=index.1303bb05.css.map */
