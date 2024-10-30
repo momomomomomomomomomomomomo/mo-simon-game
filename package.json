@@ -1,0 +1,16 @@
+{
+  "name": "simon-game-challenge-starting-files",
+  "version": "1.0.0",
+  "description": "simon game",
+  "main": "index.js",
+  "scripts": {
+    "start": "parcel index.html",
+    "build": "parcel build index.html --dist-dir ./dist"
+  },
+  "default": "index.html",
+  "author": "moustafa",
+  "license": "ISC",
+  "devDependencies": {
+    "parcel": "^2.12.0"
+  }
+}
